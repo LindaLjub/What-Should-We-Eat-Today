@@ -7,7 +7,6 @@ class recepies
 private:
 	std::string name, mainIngredient;
 
-
 public:
 	recepies();
 	recepies(std::string a, std::string b) : name(a), mainIngredient(b){};

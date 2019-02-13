@@ -8,9 +8,10 @@ int main()
 {
 	setlocale(LC_ALL, "");
 
+
 	activities go;
-	go.getData();
-	go.print();
+	go.getData(); // hämta in all data
+	go.mainMenu(); // gå till menyn
 
 }
 

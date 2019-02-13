@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "activities.h"
-#include "recepies.h"
 #include <iostream>
 #include <fstream> // hämta in data från fil
 #include <string> // getline, string
@@ -14,6 +13,39 @@ activities::activities()
 activities::~activities()
 {
 }
+
+void activities::mainMenu()
+{
+	bool b_main = false;
+	while (!b_main)
+	{
+
+	std::cout << " [1] Slumpa bland alla recept\n [2] Se alla recept\n [3] Avsluta" << std::endl;
+	std::cin >> answer;
+	
+
+		switch (answer[0])
+		{
+			case '1':
+			{
+				break;
+			}
+			case '2':
+			{
+				print();
+				break;
+			}
+			case '3':
+			{	
+				b_main = true;
+				break;
+			}
+		}
+
+	}
+
+}
+
 
 // hämtar in all data till vektorn.
 void activities::getData()
@@ -51,6 +83,17 @@ void activities::print()
 		std::cout << " Huvudingrediens: " << recept[i]->get_MainIngridient() << std::endl;
 		std::cout << " --- " << std::endl;
 	}
+
+
+
+
+
+}
+
+
+void activities::searchMainIngredient()
+{
+
 
 
 

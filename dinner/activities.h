@@ -9,11 +9,14 @@ public:
 	~activities();
 
 	std::vector<recepies *> recept;
+	std::string answer;
 
 
 	// funktioner
 	void getData(); // funktion som hämtar in data från fil.
-	void print();
+	void print(); // printar ut alla recept
+	void searchMainIngredient(); //
+	void mainMenu();
 
 
 
