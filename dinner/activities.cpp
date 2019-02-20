@@ -4,7 +4,6 @@
 #include <fstream> // hämta in data från fil
 #include <string> // getline, string
 
-// test test
 activities::activities()
 {
 }
