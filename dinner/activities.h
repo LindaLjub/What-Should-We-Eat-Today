@@ -10,6 +10,7 @@ public:
 
 	std::vector<recepies *> recept;
 	std::string answer;
+	bool swe_lang = true;
 
 
 	// funktioner
@@ -19,6 +20,7 @@ public:
 	void randomDinner(); // slumpa fram en middag
 
 	void searchIn(std::string);
+	void chooseLang(); // välj språk
 
 };
 
