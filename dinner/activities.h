@@ -5,7 +5,7 @@
 class activities
 {
 public:
-	activities();
+	activities() {};
 	~activities();
 
 	std::vector<recepies *> recept;
@@ -14,11 +14,11 @@ public:
 
 	// funktioner
 	void getData(); // funktion som hämtar in data från fil.
-	void print(); // printar ut alla recept
-	void searchMainIngredient(); //
-	void mainMenu();
+	void mainMenu(); // huvudmeny
+	void searchMainIngredient(); // sökfunktion
+	void randomDinner(); // slumpa fram en middag
 
-
+	void searchIn(std::string);
 
 };
 
