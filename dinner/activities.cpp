@@ -16,7 +16,7 @@ activities::~activities()
 		delete recept[i];
 	}
 
-	std::cout << " vector content deleted.. " << std::endl;
+	std::cout << " Vector content deleted.. " << std::endl;
 }
 
 // sortera efter huvudingrediens
@@ -42,7 +42,7 @@ void activities::getData()
 			getline(datafile, name, ':');	// fortsätt till första mellanslag. Tilldela datan till variabeln date.
 			getline(datafile, mainIngredient, ',');
 			getline(datafile, addon, ',');
-			getline(datafile, kategori, '.');
+			getline(datafile, kategori);
 
 			recept.push_back(new recepies(name, mainIngredient, addon, kategori));
 		}
@@ -51,87 +51,35 @@ void activities::getData()
 		datafile.close();
 
 	}
+	else
+	{
+		std::cout << "Could not open file.." << std::endl;
+	}
 
 }
 
 // en printfunktion, fungerar för olika vektorer
-template <typename T, typename U> T printFunc(T inParameter, U swe_lang)
+template <typename T> T printFunc(T inParameter)
 {
 	for (int i = 0; i < inParameter.size() - 1; i++)
 	{
-		if (swe_lang == true)
-		{
-			std::cout << " Maträtt: " << inParameter[i]->get_name() << std::endl;
-			std::cout << " Huvudingrediens: " << inParameter[i]->get_MainIngridient() << std::endl;
-			std::cout << " Tillbehör: " << inParameter[i]->get_addon() << std::endl;
-			std::cout << " Kategori: " << inParameter[i]->get_kategori() << std::endl;
-			std::cout << " --- " << std::endl;
-		}
-		else
-		{
 			std::cout << " Dish: " << inParameter[i]->get_name() << std::endl;
-			std::cout << " Main ingredient: " << inParameter[i]->get_MainIngridient() << std::endl;
+			std::cout << " Main: " << inParameter[i]->get_MainIngridient() << std::endl;
 			std::cout << " Addon: " << inParameter[i]->get_addon() << std::endl;
 			std::cout << " Category: " << inParameter[i]->get_kategori() << std::endl;
 			std::cout << " --- " << std::endl;
-		}
-
 	}
 
 	return inParameter;
 }
 
-void activities::chooseLang()
-{
-	bool b_lang = false;
-	while (!b_lang)
-	{
-		std::cout << "--> CHOOSE LANGUAGE" << std::endl;
-		std::cout << " [1] English\n [2] Swedish\n [3] Quit" << std::endl;
-		std::cin >> answer;
-
-		switch (answer[0])
-		{
-			case '1':
-			{
-				b_lang = true;
-				swe_lang = false;
-				mainMenu();
-				break;
-			}
-			case '2':
-			{
-				b_lang = true;
-				swe_lang = true;
-				mainMenu();
-				break;
-			}
-			case '3':
-			{
-				b_lang = true;
-				break;
-			}
-		}
-	}
-
-}
-
-// huvudmeny
 void activities::mainMenu()
 {
 	bool b_main = false;
 	while (!b_main)
 	{
-		if (swe_lang == true)
-		{
-			std::cout << " [1] Slumpa bland alla rätter\n [2] Sök efter rätter\n [3] Se alla rätter\n [4] Lägg till rätter\n [5] Avsluta" << std::endl;
-			std::cin >> answer;
-		}
-		else
-		{
 			std::cout << " [1] Get a random dish\n [2] Search for dishes\n [3] See all dishes\n [4] Add dishes\n [5] Quit" << std::endl;
 			std::cin >> answer;
-		}
 
 		switch (answer[0])
 		{
@@ -149,12 +97,12 @@ void activities::mainMenu()
 			{
 				// sortera efter huvudingrediens
 				//std::stable_sort(recept.begin(), recept.end(), text);
-				printFunc(recept, swe_lang);
+				printFunc(recept);
 				break;
 			}
 			case '4':
 			{
-				
+				add();
 				break;
 			}
 			case '5':
@@ -168,6 +116,41 @@ void activities::mainMenu()
 
 }
 
+void activities::add()
+{
+	std::string name, main, addon, category;
+
+		std::cout << " Enter name of dish: ";
+		std::cin >> name;
+		std::cout << " Enter main: " ;
+		std::cin >> main;
+		std::cout << " Enter addon: " ;
+		std::cin >> addon;
+		std::cout << " Choose category: ";
+		std::cin >> category;
+		std::cout << " --- " << std::endl;
+
+
+	// öppna filen, ios::app betyder, append at end of file. för att den bara ska lägge till text utan att ta bort text
+	std::ofstream write;
+	write.open("dinner.csv", std::ios::app);
+
+	// Om filen är öppen, hämta in datum, tid osv. till dess variabler.
+	if (write.is_open())
+	{
+		write << name << ":" << main << "," << addon << "," << category << "\n";
+		std::cout << " Added to file! " << std::endl;
+		std::cout << name << " " << main << " " << addon << " " << category << std::endl;
+	}
+	else
+	{
+		std::cout << "Could not open file.." << std::endl;
+	}
+
+	//stäng filen
+	write.close();
+
+}
 
 
 // sökfunktion
@@ -177,33 +160,25 @@ void activities::searchMainIngredient()
 	bool b_serach = false;
 	while (!b_serach)
 	{
-		if (swe_lang == true)
-		{
-			std::cout << " Sök efter: \n [1] Kyckling\n [2] Fisk\n [3] Kött\n [4] Vegetariskt\n [5] Tillbaka" << std::endl;
-			std::cin >> answer;
-		}
-		else
-		{
 			std::cout << " Search for: \n [1] Chicken\n [2] Fish\n [3] Meat\n [4] Vegetarian\n [5] Go back" << std::endl;
 			std::cin >> answer;
-		}
-
-
+	
 		switch (answer[0])
 		{
 			case '1':
 			{
-				searchIn("kyckling");
+				searchIn("chicken");
 				break;
 			}
 			case '2':
 			{
-				searchIn("fisk");
+				searchIn("fish");
 				break;
 			}
 			case '3':
 			{
-				searchIn("kött");
+				searchIn("meat");
+				
 				break;
 			}
 			case '4':
@@ -217,6 +192,7 @@ void activities::searchMainIngredient()
 				break;
 			}
 		}
+		
 	}
 }
 
@@ -233,15 +209,7 @@ void activities::randomDinner()
 	random = rand() % sizeOfVektor; 
 
 	std::cout << " --- " << std::endl;
-
-	if (swe_lang == true)
-	{
-		std::cout << " Du ska äta " << recept[random]->get_name() << std::endl;
-	}
-	else
-	{
-		std::cout << " Your dish is " << recept[random]->get_name() << std::endl;
-	}
+	std::cout << " Your dish is " << recept[random]->get_name() << std::endl;
 	std::cout << " --- " << std::endl;
 
 }
@@ -251,16 +219,23 @@ void activities::randomDinner()
 // en sökfunktion, fungerar för olika vektorer
 void activities::searchIn(std::string x)
 {
-	std::cout << "- - - -\n" << std::endl;;
+	found = 0;
+	std::cout << "- - - -\n" << std::endl;
 	for (int i = 0; i < recept.size() - 1; i++)
 	{
 		if (recept[i]->get_kategori() == x) {
 
 			std::cout << " * " << recept[i]->get_name() << std::endl;
+			found = 1;
 		}
 
 	}
-	std::cout << "\n- - - -" << std::endl;;
+	if (found == 0)
+	{
+		std::cout << " nothing found.." << std::endl;
+		found = 1;
+	}
+	std::cout << "\n- - - -" << std::endl;
 }
 
 

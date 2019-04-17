@@ -11,7 +11,7 @@ int main()
 
 	activities go;
 	go.getData(); // hämta in all data
-	go.chooseLang(); // gå till menyn
+	go.mainMenu(); // gå till menyn
 
 }
 
