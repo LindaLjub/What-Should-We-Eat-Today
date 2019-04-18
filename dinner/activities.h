@@ -23,6 +23,7 @@ public:
 	void searchIn(std::string); // sök efter huvudingridiens
 	//void chooseLang(); // välj språk
 	void add(); //lägg till maträtt
+	void chooseRandom(); // välj vad som ska slumpas
 
 };
 

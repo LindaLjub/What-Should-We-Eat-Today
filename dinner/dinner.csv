@@ -1,4 +1,6 @@
-fiskpudding:lax,ris,fisk
-korvstroganoff:korv,ris,korv
-Lax med bulgur:lax,bulgur,fisk
-tacopaj:minced,meat,meat
+tacopaj,mincedmeat,sallad,meat
+korvstroganoff,sausage,rise,meat
+ribs,with,potatoes,meat
+ribs,ribs,potatoes,meat
+ribs with potatoes,ribs,potatoes,meat
+chickenpie,chicken,sallad,chicken

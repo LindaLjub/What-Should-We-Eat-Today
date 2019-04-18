@@ -39,7 +39,7 @@ void activities::getData()
 	{
 		while (!datafile.eof()) // fortsätt så länge som det finns något i datan.
 		{
-			getline(datafile, name, ':');	// fortsätt till första mellanslag. Tilldela datan till variabeln date.
+			getline(datafile, name, ',');	// fortsätt till första mellanslag. Tilldela datan till variabeln date.
 			getline(datafile, mainIngredient, ',');
 			getline(datafile, addon, ',');
 			getline(datafile, kategori);
@@ -85,7 +85,7 @@ void activities::mainMenu()
 		{
 			case '1':
 			{	
-				randomDinner();
+				chooseRandom();
 				break;
 			}
 			case '2':
@@ -116,18 +116,85 @@ void activities::mainMenu()
 
 }
 
+void activities::chooseRandom()
+{
+	bool b_chooseR = false;
+	while (!b_chooseR)
+	{
+		std::cout << " Which category would you like to get a random dish from?\n" 
+		<< " [1] Chicken\n [2] Fish\n [3] Meat\n [4] Vegetarian\n [5] All dishes\n [6] Go back" << std::endl;
+		std::cin >> answer;
+		switch (answer[0])
+		{
+			case '1':
+			{
+				std::cout << "not available yet.." << std::endl;
+				break;
+			}
+			case '2':
+			{
+				std::cout << "not available yet.." << std::endl;
+				break;
+			}
+			case '3':
+			{
+				std::cout << "not available yet.." << std::endl;
+				break;
+			}
+			case '4':
+			{	
+				std::cout << "not available yet.." << std::endl;
+				break;
+			}
+			case '5':
+			{
+				randomDinner();
+				break;
+			}
+			case '6':
+			{
+				b_chooseR = true;
+				break;
+			}
+
+		}
+	}
+}
+
 void activities::add()
 {
 	std::string name, main, addon, category;
 
-		std::cout << " Enter name of dish: ";
+		std::cout << " Enter the name of the dish (one word only): ";
 		std::cin >> name;
-		std::cout << " Enter main: " ;
+		std::cout << " Enter main (ex falukorv, steak):" ;
 		std::cin >> main;
-		std::cout << " Enter addon: " ;
+		std::cout << " Enter addon (ex. rise, potatoes): " ;
 		std::cin >> addon;
-		std::cout << " Choose category: ";
-		std::cin >> category;
+		std::cout << " Choose a category: \n [1] Chicken\n [2] Fish\n [3] Meat\n [4] Vegetarian" << std::endl;
+		std::cin >> answer;
+		switch (answer[0]) {
+			case '1':
+			{
+				category = "chicken";
+				break;
+			}
+			case '2':
+			{
+				category = "fish";
+				break;
+			}
+			case '3':
+			{
+				category = "meat";
+				break;
+			}
+			case '4':
+			{
+				category = "veg";
+				break;
+			}
+		}
 		std::cout << " --- " << std::endl;
 
 
@@ -138,9 +205,9 @@ void activities::add()
 	// Om filen är öppen, hämta in datum, tid osv. till dess variabler.
 	if (write.is_open())
 	{
-		write << name << ":" << main << "," << addon << "," << category << "\n";
+		write << name << "," << main << "," << addon << "," << category << "\n";
 		std::cout << " Added to file! " << std::endl;
-		std::cout << name << " " << main << " " << addon << " " << category << std::endl;
+		std::cout << name << std::endl;
 	}
 	else
 	{
@@ -209,7 +276,7 @@ void activities::randomDinner()
 	random = rand() % sizeOfVektor; 
 
 	std::cout << " --- " << std::endl;
-	std::cout << " Your dish is " << recept[random]->get_name() << std::endl;
+	std::cout << " Your dish is " << recept[random]->get_name() << ", bon appétit! "<< std::endl;
 	std::cout << " --- " << std::endl;
 
 }
