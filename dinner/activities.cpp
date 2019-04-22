@@ -11,11 +11,26 @@
 
 activities::~activities()
 {
+	for (int i = 0; i < meat.size(); i++)
+	{
+		delete meat[i];
+	}
+	for (int i = 0; i < chicken.size(); i++)
+	{
+		delete chicken[i];
+	}
+	for (int i = 0; i < fish.size(); i++)
+	{
+		delete fish[i];
+	}
+	for (int i = 0; i < veg.size(); i++)
+	{
+		delete veg[i];
+	}
 	for (int i = 0; i < recept.size(); i++)
 	{
 		delete recept[i];
 	}
-
 	std::cout << " Vector content deleted.. " << std::endl;
 }
 
@@ -32,7 +47,7 @@ void activities::getData()
 
 	// Öppnar filen 
 	std::ifstream datafile("dinner.csv");
-	std::string name, mainIngredient, addon, kategori;
+	std::string name, mainIngredient, addon, Category;
 
 	// Om filen är öppen, hämta in datum, tid osv. till dess variabler.
 	if (datafile.is_open())
@@ -42,9 +57,26 @@ void activities::getData()
 			getline(datafile, name, ',');	// fortsätt till första mellanslag. Tilldela datan till variabeln date.
 			getline(datafile, mainIngredient, ',');
 			getline(datafile, addon, ',');
-			getline(datafile, kategori);
+			getline(datafile, Category);
 
-			recept.push_back(new recepies(name, mainIngredient, addon, kategori));
+			recept.push_back(new recepies(name, mainIngredient, addon, Category)); 
+
+			if (Category == "meat")
+			{
+				meat.push_back(new recepies(name, mainIngredient, addon, Category));
+			}
+			if (Category == "fish")
+			{
+				fish.push_back(new recepies(name, mainIngredient, addon, Category));
+			}
+			if (Category == "chicken")
+			{
+				chicken.push_back(new recepies(name, mainIngredient, addon, Category));
+			}
+			if (Category == "veg")
+			{
+				veg.push_back(new recepies(name, mainIngredient, addon, Category));
+			}
 		}
 
 		// Stänger filen när man är färdig med den.
@@ -53,7 +85,7 @@ void activities::getData()
 	}
 	else
 	{
-		std::cout << "Could not open file.." << std::endl;
+		std::cout << " Could not open file.." << std::endl;
 	}
 
 }
@@ -61,15 +93,24 @@ void activities::getData()
 // en printfunktion, fungerar för olika vektorer
 template <typename T> T printFunc(T inParameter)
 {
-	for (int i = 0; i < inParameter.size() - 1; i++)
+	int size = inParameter.size();
+	std::cout << "- - - -\n" << std::endl;
+	if (size < 1)
 	{
-			std::cout << " Dish: " << inParameter[i]->get_name() << std::endl;
-			std::cout << " Main: " << inParameter[i]->get_MainIngridient() << std::endl;
-			std::cout << " Addon: " << inParameter[i]->get_addon() << std::endl;
-			std::cout << " Category: " << inParameter[i]->get_kategori() << std::endl;
-			std::cout << " --- " << std::endl;
+		std::cout << " Nothing found!" << std::endl;
 	}
-
+	else
+	{
+		for (int i = 0; i < size; i++)
+		{
+		std::cout << " Dish: " << inParameter[i]->get_name() << std::endl;
+		std::cout << " Main: " << inParameter[i]->get_MainIngridient() << std::endl;
+		std::cout << " Addon: " << inParameter[i]->get_addon() << std::endl;
+		std::cout << " Category: " << inParameter[i]->get_kategori() << std::endl;
+		
+		}
+	}
+	std::cout << "\n- - - -" << std::endl;
 	return inParameter;
 }
 
@@ -78,8 +119,10 @@ void activities::mainMenu()
 	bool b_main = false;
 	while (!b_main)
 	{
-			std::cout << " [1] Get a random dish\n [2] Search for dishes\n [3] See all dishes\n [4] Add dishes\n [5] Quit" << std::endl;
+			std::cout << " [1] Get a random dish\n [2] Search for dishes\n [3] See a list of available dishes\n [4] Add dishes\n [5] Update list of dishes\n [6] Quit" << std::endl;
+			std::cout << " --> "; 
 			std::cin >> answer;
+			
 
 		switch (answer[0])
 		{
@@ -97,7 +140,7 @@ void activities::mainMenu()
 			{
 				// sortera efter huvudingrediens
 				//std::stable_sort(recept.begin(), recept.end(), text);
-				printFunc(recept);
+				listOfDishes();
 				break;
 			}
 			case '4':
@@ -107,6 +150,42 @@ void activities::mainMenu()
 			}
 			case '5':
 			{	
+				int size = meat.size();
+				for (int i = 0; i < size; i++)
+				{
+					meat.pop_back();
+				}
+
+				size = chicken.size();
+				for (int i = 0; i < size; i++)
+				{
+					chicken.pop_back();
+				}
+
+				size = fish.size();
+				for (int i = 0; i < size; i++)
+				{
+					fish.pop_back();
+				}
+
+				size = veg.size();
+				for (int i = 0; i < size; i++)
+				{
+					veg.pop_back();
+				}
+
+				size = recept.size();
+				for (int i = 0; i < size; i++)
+				{
+					recept.pop_back();
+				}
+
+				getData();
+				std::cout << " Content updated" << std::endl;
+				break;
+			}
+			case '6':
+			{
 				b_main = true;
 				break;
 			}
@@ -116,39 +195,85 @@ void activities::mainMenu()
 
 }
 
-void activities::chooseRandom()
+void activities::listOfDishes()
 {
-	bool b_chooseR = false;
-	while (!b_chooseR)
+	bool b_listD = false;
+	while (!b_listD)
 	{
-		std::cout << " Which category would you like to get a random dish from?\n" 
-		<< " [1] Chicken\n [2] Fish\n [3] Meat\n [4] Vegetarian\n [5] All dishes\n [6] Go back" << std::endl;
+		std::cout << "-Which dishes would you like to see? " << std::endl;
+		std::cout << " [1] Chicken\n [2] Fish\n [3] Meat\n [4] Vegetarian\n [5] All dishes\n [6] Go back" << std::endl;
+		std::cout << " --> ";
 		std::cin >> answer;
 		switch (answer[0])
 		{
 			case '1':
 			{
-				std::cout << "not available yet.." << std::endl;
+				printFunc(chicken);
 				break;
 			}
 			case '2':
 			{
-				std::cout << "not available yet.." << std::endl;
+				printFunc(fish);
 				break;
 			}
 			case '3':
 			{
-				std::cout << "not available yet.." << std::endl;
+				printFunc(meat);
 				break;
 			}
 			case '4':
-			{	
-				std::cout << "not available yet.." << std::endl;
+			{
+				printFunc(veg);
 				break;
 			}
 			case '5':
 			{
-				randomDinner();
+				printFunc(recept);
+				break;
+			}
+			case '6':
+			{
+				b_listD = true;
+				break;
+			}
+		}
+	}
+}
+
+void activities::chooseRandom()
+{
+	bool b_chooseR = false;
+	while (!b_chooseR)
+	{
+		std::cout << " -Which category would you like to get a random dish from?\n" 
+		<< " [1] Chicken\n [2] Fish\n [3] Meat\n [4] Vegetarian\n [5] All dishes\n [6] Go back" << std::endl;
+		std::cout << " --> "; 
+		std::cin >> answer;
+		switch (answer[0])
+		{
+			case '1':
+			{
+				randomDinnerSpec(chicken);
+				break;
+			}
+			case '2':
+			{
+				randomDinnerSpec(fish);
+				break;
+			}
+			case '3':
+			{
+				randomDinnerSpec(meat);
+				break;
+			}
+			case '4':
+			{	
+				randomDinnerSpec(veg);
+				break;
+			}
+			case '5':
+			{
+				randomDinnerSpec(recept);
 				break;
 			}
 			case '6':
@@ -156,7 +281,6 @@ void activities::chooseRandom()
 				b_chooseR = true;
 				break;
 			}
-
 		}
 	}
 }
@@ -206,12 +330,11 @@ void activities::add()
 	if (write.is_open())
 	{
 		write << name << "," << main << "," << addon << "," << category << "\n";
-		std::cout << " Added to file! " << std::endl;
-		std::cout << name << std::endl;
+		std::cout << " " << name << " was added to the list! " << std::endl;
 	}
 	else
 	{
-		std::cout << "Could not open file.." << std::endl;
+		std::cout << " Could not open file.." << std::endl;
 	}
 
 	//stäng filen
@@ -223,34 +346,34 @@ void activities::add()
 // sökfunktion
 void activities::searchMainIngredient()
 {
-
 	bool b_serach = false;
 	while (!b_serach)
 	{
-			std::cout << " Search for: \n [1] Chicken\n [2] Fish\n [3] Meat\n [4] Vegetarian\n [5] Go back" << std::endl;
-			std::cin >> answer;
+		std::cout << " Search for: \n [1] Chicken\n [2] Fish\n [3] Meat\n [4] Vegetarian\n [5] Go back" << std::endl;
+		std::cout << " --> "; 
+		std::cin >> answer;
 	
 		switch (answer[0])
 		{
 			case '1':
 			{
-				searchIn("chicken");
+				searchIn(chicken);
 				break;
 			}
 			case '2':
 			{
-				searchIn("fish");
+				searchIn(fish);
 				break;
 			}
 			case '3':
 			{
-				searchIn("meat");
+				searchIn(meat);
 				
 				break;
 			}
 			case '4':
 			{
-				searchIn("veg");
+				searchIn(veg);
 				break;
 			}
 			case '5':
@@ -258,51 +381,55 @@ void activities::searchMainIngredient()
 				b_serach = true;
 				break;
 			}
-		}
-		
+		}		
 	}
 }
 
-// slumpa bland alla rätter
-void activities::randomDinner()
-{
-	// även denna går kanske att göra med templates för att kunna slumpa efter kyckling/kött osv?
 
+// slumpa bland specifika/alla rätter
+template <typename T> T activities::randomDinnerSpec(T inParameter)
+{
+	// Skicka in en vector beroende på vilken kategori det är.
 
 	int random, sizeOfVektor;
-	sizeOfVektor = recept.size() - 1; // så att jag bara får tal som finns.
+	sizeOfVektor = inParameter.size(); // så att jag bara får tal som finns.
+
+	std::cout << "- - - -\n" << std::endl;
+	if (sizeOfVektor < 1)
+	{
+		std::cout << " Nothing found!" << std::endl;
+
+	}
+	else
+	{ 
 
 	srand(time(NULL)); // så att den inte alltid börjar på samma
-	random = rand() % sizeOfVektor; 
-
-	std::cout << " --- " << std::endl;
-	std::cout << " Your dish is " << recept[random]->get_name() << ", bon appétit! "<< std::endl;
-	std::cout << " --- " << std::endl;
-
+	random = rand() % sizeOfVektor + 0;
+	std::cout << " Your dish is " << inParameter[random]->get_name() << ", bon appétit! " << std::endl;
+	}
+	std::cout << "\n- - - -" << std::endl;
+	return inParameter;
 }
-
 
 
 // en sökfunktion, fungerar för olika vektorer
-void activities::searchIn(std::string x)
+template <typename T> T activities::searchIn(T inParameter)
 {
-	found = 0;
 	std::cout << "- - - -\n" << std::endl;
-	for (int i = 0; i < recept.size() - 1; i++)
-	{
-		if (recept[i]->get_kategori() == x) {
+	int size = inParameter.size();
 
-			std::cout << " * " << recept[i]->get_name() << std::endl;
-			found = 1;
-		}
+	for (int i = 0; i < size; i++)
+	{
+		std::cout << " * " << inParameter[i]->get_name() << std::endl;
 
 	}
-	if (found == 0)
+	if (size < 1)
 	{
-		std::cout << " nothing found.." << std::endl;
-		found = 1;
+		std::cout << " Nothing found!" << std::endl;
 	}
 	std::cout << "\n- - - -" << std::endl;
+
+	return inParameter;
 }
 
 
