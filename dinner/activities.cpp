@@ -31,7 +31,7 @@ activities::~activities()
 	{
 		delete recept[i];
 	}
-	std::cout << " Vector content deleted.. " << std::endl;
+	std::cout << " Vector content deleted.. . " << std::endl;
 }
 
 // sortera efter huvudingrediens
